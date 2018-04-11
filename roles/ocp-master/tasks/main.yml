@@ -3,8 +3,8 @@
       assert:
         that: "ansible_distribution == 'RedHat'"
     
-    - name: Enable Repos Specific to OCP 3.6
-      command: subscription-manager repos --enable="rhel-7-server-ose-3.6-rpms" --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-fast-datapath-rpms"
+    - name: Enable Repos Specific to OCP 3.9
+      command: subscription-manager repos --enable="rhel-7-server-ose-3.9-rpms" --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-fast-datapath-rpms" --enable="rhel-7-server-ansible-2.4-rpms"
       
     - name: Update all hosts
       yum:
@@ -51,31 +51,13 @@
         register: dockervg_result
       with_items:
         - "/dev/docker-vg"
-
-    - name: check if docker pool LV exists
-      command: lv display | grep docker-pool
-      register: pool_result
         
     - name: Creating Docker thing Pools and Configuring storage for docker Containers
       command: "docker-storage-setup"
-      when: dockervg_result.stat.exists == False or pool_result == false
+      when: dockervg_result.stat.exists == False
         
     - name: Enable docker service
       systemd:
         name: docker
         state: started
-        enabled: True
-        
-    - name: Ensure NetworkManager Setting for dns is disabled
-      copy:
-        src: NetworkManager.conf
-        dest: "{{ nm_conf }}"
-        owner: root
-        group: root
-        mode: 0644
-        
-    - name: Restart NetworkManager
-      systemd:
-        name: NetworkManager
-        state: restarted
         enabled: True
