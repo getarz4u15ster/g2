@@ -23,7 +23,7 @@
           - sos
           - psacct
           - atomic-openshift-utils
-          - docker
+          - docker-1.13.1
           - NetworkManager
     
     - name: Open ports required for dnsmasq and dns for OCP
@@ -45,12 +45,11 @@
         group: root
         mode: 755
         
-    - name: check if docker-vg exists
+    - name: Check if docker-vg exists
       stat:
-        path: "{{ item }}"
-        register: dockervg_result
-      with_items:
-        - "/dev/docker-vg"
+        path: /dev/docker-vg
+        get_md5: no
+      register: dockervg_result
         
     - name: Creating Docker thing Pools and Configuring storage for docker Containers
       command: "docker-storage-setup"

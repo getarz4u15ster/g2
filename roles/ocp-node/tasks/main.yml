@@ -23,7 +23,7 @@
           - sos
           - psacct
           - atomic-openshift-utils
-          - docker
+          - docker-1.13.1
           - NetworkManager
     
     - name: Open ports required for dnsmasq and dns for OCP
