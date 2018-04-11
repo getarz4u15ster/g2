@@ -4,7 +4,7 @@
         that: "ansible_distribution == 'RedHat'"
     
     - name: Enable Repos Specific to OCP 3.6
-      command: subscription-manager repos --enable="rhel-7-server-ose-3.6-rpms" --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-fast-datapath-rpms"
+      command: subscription-manager repos --enable="rhel-7-server-ose-3.9-rpms" --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-fast-datapath-rpms" --enable="rhel-7-server-ansible-2.4-rpms"
       
     - name: Update all hosts
       yum:
@@ -41,18 +41,4 @@
       systemd:
         name: docker
         state: started
-        enabled: True
-        
-    - name: Ensure NetworkManager Setting for dns is disabled
-      copy:
-        src: NetworkManager.conf
-        dest: "{{ nm_conf }}"
-        owner: root
-        group: root
-        mode: 0644
-        
-    - name: Restart NetworkManager
-      systemd:
-        name: NetworkManager
-        state: restarted
         enabled: True
